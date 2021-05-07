@@ -14,10 +14,10 @@ from ..items import ScienceNewsItem
 # content = '//div[@class="new_text "]/p/span[notow]/text()'
 
 
-class SpiderHowStuffworks(scrapy.Spider):
-    name = 'howstuffworks'
+class SpiderScienceNews(scrapy.Spider):
+    name = 'sciencenews'
     start_urls = [
-        'https://www.howstuffworks.com'
+        'https://www.sciencenews.org'
     ]
     customs_settings = {
         'FEED_URI': 'howstuffworks.json',
@@ -27,21 +27,21 @@ class SpiderHowStuffworks(scrapy.Spider):
 
     def parse(self, response):
         links_categories = response.xpath(
-            '//a[@data-text]/@href'
+            '//a[contains(@class, "topics-megamenu")]/@href'
             ).getall()
         for link in links_categories:
             yield response.follow(link, callback=self.parse_category)
 
     def parse_category(self, response, **kwargs):
         links_subcategories = response.xpath(
-            '//div[@data-track-gtm="Topics to Explore"]/div/div/a/@href'
+            '//a[contains(@class, "term-feature-header")]/@href'
             ).getall()
         for link in links_subcategories:
             yield response.follow(link, callback=self.parse_notice)
 
     def parse_notice(self, response, **kwargs):
         news_links = response.xpath(
-            '//div[@class="mb-4"]/div[@data-track-gtm !="Topics to Explore"]//a/@href'
+            '//h3[contains(@class, "title")]/a/@href'
             ).getall()
         for link in news_links:
             yield response.follow(link, callback=self.parse_link,
@@ -51,36 +51,42 @@ class SpiderHowStuffworks(scrapy.Spider):
         items = ScienceNewsItem()
         link = kwargs['url']
         title = response.xpath(
-            '//div[contains(@class,"page-title")]/h1/text()'
+            '//h1[@class="header-default__title___2wL7r"]/text()'
         ).get()
-        title = title.strip('\n').strip('\t')
         tag = response.xpath(
-            '//div[@itemprop]/a/span/text()'
+            '//span[@class="header-default__eyebrow___b3lhS"]/a/text()'
         ).getall()
+        tags = []
+        for i in tag:
+            tags.append(i.strip('\n').strip('\t'))
         author = response.xpath(
-            '//p[@class="mb-4"]/a/text()'
+            '//span[@class="byline author vcard"]/a/text()'
         ).get()
         image = response.xpath(
-            '//div[@class="media-hero-wrap"]//img/@src'
+            '//figure[@class="header-default__figure___1N2fo"]/div/img/@src'
         ).getall()
-        image = image[1]
+        image_author = response.xpath(
+            '//span[@class="header-default__credit___34nDz"]/p/text()'
+        ).getall()
+        if type(image_author) == list and len(image_author) > 0:
+            image_author = image_author[0]
         imagen_content = response.xpath(
-            '//div[@class="media-body"]/text()'
+            '//span[@class="header-default__caption___1B6mW"]/p/text()'
         ).getall()
-        imagecontent = []
-        for con in imagen_content:
-            imagecontent.append(con.replace('\n','').replace('\t',''))
+        if type(imagen_content) == list:
+            imagen_content = imagen_content[0]
+        imagecontent = imagen_content + ' ' + image_author
         date = response.xpath(
-            '//p[@class="mb-4"]/span/text()'
+            '//p[@class="byline__published___3GjAo"]/time[@class]/text()'
         ).get()
         content = response.xpath(
-            '//div[@class = "page-content"]//p/descendant-or-self::text()'
+            '//div[@class="single__content___Cm2ty"]/div/p/descendant-or-self::text()'
         ).getall()
         content_complete = ""
-        for cont in content:
-            content_complete += cont
+        for cont in content:  
+            content_complete += cont + " "
         items['url'] = link
-        items['tag'] = tag[1:]
+        items['tag'] = tags
         items['title'] = title
         items['author'] = author
         items['image'] = image
