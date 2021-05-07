@@ -68,13 +68,17 @@ class SpiderScienceNews(scrapy.Spider):
         image_author = response.xpath(
             '//span[@class="header-default__credit___34nDz"]/p/text()'
         ).getall()
-        if type(image_author) == list and len(image_author) > 0:
+        try:
             image_author = image_author[0]
+        except:
+            image_author = ""
         imagen_content = response.xpath(
             '//span[@class="header-default__caption___1B6mW"]/p/text()'
         ).getall()
-        if type(imagen_content) == list:
+        try:
             imagen_content = imagen_content[0]
+        except:
+            imagen_content = ""
         imagecontent = imagen_content + ' ' + image_author
         date = response.xpath(
             '//p[@class="byline__published___3GjAo"]/time[@class]/text()'
@@ -83,7 +87,7 @@ class SpiderScienceNews(scrapy.Spider):
             '//div[@class="single__content___Cm2ty"]/div/p/descendant-or-self::text()'
         ).getall()
         content_complete = ""
-        for cont in content:  
+        for cont in content:
             content_complete += cont + " "
         items['url'] = link
         items['tag'] = tags

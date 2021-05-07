@@ -38,7 +38,6 @@ class SpiderHowStuffworks(scrapy.Spider):
             ).getall()
         for link in links_subcategories:
             yield response.follow(link, callback=self.parse_notice)
-
     def parse_notice(self, response, **kwargs):
         news_links = response.xpath(
             '//div[@class="mb-4"]/div[@data-track-gtm !="Topics to Explore"]//a/@href'
@@ -53,7 +52,8 @@ class SpiderHowStuffworks(scrapy.Spider):
         title = response.xpath(
             '//div[contains(@class,"page-title")]/h1/text()'
         ).get()
-        title = title.strip('\n').strip('\t')
+        if title != None:
+            title = title.strip('\n').strip('\t')
         tag = response.xpath(
             '//div[@itemprop]/a/span/text()'
         ).getall()
@@ -63,7 +63,8 @@ class SpiderHowStuffworks(scrapy.Spider):
         image = response.xpath(
             '//div[@class="media-hero-wrap"]//img/@src'
         ).getall()
-        image = image[1]
+        if image != []:
+            image = image[1]
         imagen_content = response.xpath(
             '//div[@class="media-body"]/text()'
         ).getall()

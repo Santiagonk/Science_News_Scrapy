@@ -34,7 +34,7 @@ class SpiderNature(scrapy.Spider):
         items = ScienceNewsItem()
         link = kwargs['url']
         title = response.xpath(
-            '//h1[@class="header-default__title___2wL7r"]/text()'
+            '//h1[@itemprop="headline"]/text()'
         ).get()
         tag = response.xpath(
             '//li[@class="subject"]/a/text()'
@@ -48,9 +48,9 @@ class SpiderNature(scrapy.Spider):
         image_content = response.xpath(
             '//figure[@class="figure"]//p//text()'
         ).getall()
-        imagecontent = []
+        imagecontent = ""
         for con in image_content:
-            imagecontent.append(con)
+            imagecontent += con + " "
         date = response.xpath(
             '//time[@itemprop="datePublished"]/text()'
         ).get()
@@ -66,7 +66,7 @@ class SpiderNature(scrapy.Spider):
         items['title'] = title
         items['author'] = author
         items['image'] = image
-        items['image_content'] = image_content
+        items['image_content'] = imagecontent
         items['date'] = date
         items['content'] = content_complete
 
