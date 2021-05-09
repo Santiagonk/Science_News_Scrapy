@@ -6,13 +6,24 @@
 #     https://docs.scrapy.org/en/latest/topics/settings.html
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+from dotenv import load_dotenv
+import os
 
 BOT_NAME = 'Science_News'
 
 SPIDER_MODULES = ['Science_News.spiders']
 NEWSPIDER_MODULE = 'Science_News.spiders'
 
+load_dotenv()
 
+USER = os.getenv("DB_USER")
+PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("DB_HOST")
+DB_NAME = os.getenv("DB_NAME")
+
+
+MONGO_URI = f'mongodb+srv://{USER}:{PASSWORD}@{DB_HOST}/{DB_NAME}?retryWrites=true'
+MONGO_DATABASE = f'{DB_NAME}'
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'Science_News (+http://www.yourdomain.com)'
 
@@ -62,9 +73,11 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-# ITEM_PIPELINES = {
-#    'Science_News.pipelines.ScienceNewsPipeline': 300,
-# }
+ITEM_PIPELINES = {
+   'Science_News.pipelines.ScienceNewsPipeline': 300,
+}
+
+
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
