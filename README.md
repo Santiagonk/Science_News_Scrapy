@@ -2,7 +2,8 @@
 
 ## Descripción
 
-API realizada como conjunto de trabajo para el proyecto 3 de Platzi Master Cohort 7, en el que se realiza extraccion de informacion de la web.
+API realizada como conjunto de trabajo para el proyecto 3 de Platzi Master Cohort 7, en el que se realiza extracción de información de la web, de varias paginas de noticias. La API tiene como finalidad permitir al Front-End consumir la información generada por el scrapper, almacenada en una base de datos.
+
 * revisa el repositorio del scrapper [aqui](https://github.com/Santiagonk/Science_News_Scrapy).
 
 Mira la documentación del proyecto en Notion:
