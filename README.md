@@ -1,7 +1,7 @@
 # API_News_Flask
 
 ## Descripción
-
+------------
 API realizada como conjunto de trabajo para el proyecto 3 de Platzi Master Cohort 7, en el que se realiza extracción de información de la web, de varias paginas de noticias. La API tiene como finalidad permitir al Front-End consumir la información generada por el scrapper, almacenada en una base de datos.
 
 * revisa el repositorio del scrapper [aqui](https://github.com/Santiagonk/Science_News_Scrapy).
@@ -30,30 +30,30 @@ Crea e inicia el entorno virtual. [Virtual Environments](https://realpython.com/
     $ pip install -r requirements.txt
 
 ### API VERSION
-
+------------
 Version 1.0
 
 ### HOST ACTUAL
-
+------------
 API se encuentra actualmente implementada en Heroku, a la que puedes acceder mediante el link:
 
 * https://gentle-taiga-63852.herokuapp.com/
 
 ### Lenguajes
-
+------------
 * Python
 * Flask (Framework)
 
 ### Base de Datos
-
+------------
 * MongoDB
 
 ### Plataforma de Pruebas
-
+------------
 * [Postman](https://documenter.getpostman.com/view/15367532/TzRSfSJR)
 
 ### Consideraciones
-
+------------
 API realizada como conjunto de trabajo para el proyecto 3 de Platzi Master Cohort 7, revisa el repositorio del scrapper [aqui](https://github.com/Santiagonk/Science_News_Scrapy).
 
 
